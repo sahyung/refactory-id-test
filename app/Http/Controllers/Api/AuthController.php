@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Uuid;
 class AuthController extends Controller
 {
     public function register(Request $request)
@@ -24,49 +25,52 @@ class AuthController extends Controller
                 'errors' => $v->errors()
             ], 422);
         }
-        $user = new User;
-        $user->email = $request->email;
-        $user->password = bcrypt($request->password);
-        $user->save();
-        return response()->json(['status' => 'success'], 200);
+        $user = User::create(array_merge(
+            $v->validated(),
+            [
+                'password' => bcrypt($request->password),
+                'id' => Uuid::generate(4)->string,
+            ]
+        ));
+
+        return response()->json([
+            'success' => true,
+            'data' => $user,
+        ], 200);
     }
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
         if ($token = $this->guard()->attempt($credentials)) {
-            // return $this->respondWithToken($token);
-            return response()->json(['status' => 'success'], 200)->header('Authorization', $token);
+            return $this->respondWithToken($token);
         }
-        return response()->json(['error' => 'login_error'], 401);
+        return response()->json([
+            'success' => false,
+            'error' => 'login_error',
+        ], 401);
     }
 
     public function logout()
     {
         $this->guard()->logout();
         return response()->json([
-            'status' => 'success',
+            'success' => true,
             'msg' => 'Logged out Successfully.'
         ], 200);
     }
-
+    
     public function user(Request $request)
     {
         $user = User::find(Auth::user()->id);
         return response()->json([
-            'status' => 'success',
+            'success' => true,
             'data' => $user
         ]);
     }
 
     public function refresh()
     {
-        // return $this->respondWithToken(auth()->refresh());
-        if ($token = $this->guard()->refresh()) {
-            return response()
-                ->json(['status' => 'successs'], 200)
-                ->header('Authorization', $token);
-        }
-        return response()->json(['error' => 'refresh_token_error'], 401);
+        return $this->respondWithToken(auth()->refresh());
     }
 
     private function guard()

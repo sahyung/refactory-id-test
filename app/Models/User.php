@@ -39,6 +39,8 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
+    public $incrementing = false;
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
