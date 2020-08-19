@@ -29,9 +29,9 @@ return `response` below
     "trx_amount": "float",
     "trx_date_time": "date_time",
     "disc": "bool",
-    "disc_rate": "integer", // percentage of the discount for this transaction
-    "disc_amount": "float", // how much discount for this transaction 
-    "payment_amout": "float", // amount needs to be paid
+    "disc_rate": "integer | percentage of the discount for this transaction",
+    "disc_amount": "float | how much discount for this transaction ",
+    "payment_amout": "float | amount needs to be paid",
 }
 ```
 
