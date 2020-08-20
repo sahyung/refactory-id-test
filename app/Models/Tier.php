@@ -3,14 +3,12 @@
 namespace App\Models;
 
 use App\Traits\UuidsTrait;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject
+class Tier extends Model
 {
-    use Notifiable, SoftDeletes, UuidsTrait;
+    use SoftDeletes, UuidsTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -18,7 +16,11 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 
+        'min', 
+        'max', 
+        'disc_rate', 
+        'disc_prob', 
     ];
 
     /**
@@ -27,7 +29,6 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
     ];
 
     /**
@@ -37,19 +38,8 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $casts = [
         'id' => 'string',
-        'email_verified_at' => 'datetime',
     ];
 
     public $incrementing = false;
-
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
-    
-    public function getJWTCustomClaims()
-    {
-        return [];
-    }
 
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUsersTable extends Migration
+class CreateTiersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,14 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('tiers', function (Blueprint $table) {
             $table->uuid('id');
             $table->primary('id');
             $table->string('name')->nullable();
-            $table->string('email')->unique();
-            $table->enum('role',['user','admin','superadmin'])->default('user');
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken()->nullable();
+            $table->bigInteger('min')->nullable();
+            $table->bigInteger('max')->nullable();
+            $table->integer('disc_rate')->nullable()->comment('percentage of the discount for this tier');
+            $table->integer('disc_prob')->nullable()->comment('percentage of the probability getting the discount');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -34,6 +33,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('tiers');
     }
 }

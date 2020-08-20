@@ -31,3 +31,10 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::post('transactions', 'TransactionController@store');
+
+// Tier BREAD (Browse, Read, Edit, Add, Delete)
+Route::get('tiers', 'TierController@browse');
+Route::get('tiers/{id}', 'TierController@read');
+Route::put('tiers/{id}', 'TierController@edit');
+Route::post('tiers', 'TierController@add');
+Route::delete('tiers/{id}', 'TierController@delete');
