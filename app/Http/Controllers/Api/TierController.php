@@ -17,7 +17,18 @@ class TierController extends Controller
 
     public function read($id)
     {
-
+        if ($tier = Tier::find($id)) {
+            return response()->json([
+                'success' => true,
+                'data' => $tier,
+            ]);
+        }
+        return response()->json([
+            'success' => false,
+            'errors' => [
+                'id' => 'The id is not exists on database.'
+            ]
+        ], 400);
     }
 
     public function edit(Request $request, $id)
