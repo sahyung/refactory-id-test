@@ -17,6 +17,18 @@ Route::group(['middleware' => 'auth:api'], function(){
     // Users
     Route::get('users', 'UserController@index')->middleware('isAdmin');
     Route::get('users/{id}', 'UserController@show')->middleware('isAdminOrSelf');
+    Route::get('users/generate/token', 'AuthController@getToken');
+
+    // Tier BREAD (Browse, Read, Edit, Add, Delete)
+    Route::get('tiers', 'TierController@browse');
+    Route::get('tiers/{id}', 'TierController@read');
+    Route::put('tiers/{id}', 'TierController@edit');
+    Route::post('tiers', 'TierController@add');
+    Route::delete('tiers/{id}', 'TierController@delete');
+});
+
+Route::group(['middleware' => 'checkToken'], function () {
+    Route::post('transactions', 'TransactionController@store');
 });
 
 Route::prefix('auth')->group(function () {
@@ -29,12 +41,3 @@ Route::prefix('auth')->group(function () {
         Route::post('logout', 'AuthController@logout');
     });
 });
-
-Route::post('transactions', 'TransactionController@store');
-
-// Tier BREAD (Browse, Read, Edit, Add, Delete)
-Route::get('tiers', 'TierController@browse');
-Route::get('tiers/{id}', 'TierController@read');
-Route::put('tiers/{id}', 'TierController@edit');
-Route::post('tiers', 'TierController@add');
-Route::delete('tiers/{id}', 'TierController@delete');

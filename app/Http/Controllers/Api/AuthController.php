@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Uuid;
 class AuthController extends Controller
 {
@@ -65,6 +66,19 @@ class AuthController extends Controller
         return response()->json([
             'success' => true,
             'data' => $user
+        ]);
+    }
+
+    public function getToken(Request $request)
+    {
+        $user = User::find(Auth::user()->id)->makeVisible('remember_token');
+        if (is_null($user->remember_token)) {
+            $user->remember_token = Str::random(64);
+            $user->save();
+        }
+        return response()->json([
+            'success' => true,
+            'data' => $user->remember_token,
         ]);
     }
 
