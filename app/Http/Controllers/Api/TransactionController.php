@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Api\Controller;
+use App\Models\Tier;
 
 class TransactionController extends Controller
 {
@@ -22,19 +23,22 @@ class TransactionController extends Controller
                 'errors' => $v->errors()
             ], 422);
         }
-
+        $tier = Tier::orderBy('min', 'asc')
+            ->where('min', '<=', $request->trx_amount)
+            ->where('max', '>=', $request->trx_amount)
+            ->first();
+        if ($tier) $tier = $tier->toArray();
         $data = array_merge(
             $v->validated(),
             [
                 'disc' => false,
-                'disc_rate' => 10, // percentage
+                'disc_rate' => $tier ? $tier['disc_rate'] : 0, // discount percentage
             ]
         );
 
-        
-        $data['disc'] = $this->roulette([1, 0], [9, 1]);
+        $data['disc'] = $this->roulette([1, 0], [$tier['disc_prob'], (100 - $tier['disc_prob'])]);
         $data['disc_amount'] = $data['disc'] ? floor($data['disc_rate'] * $request->trx_amount / 100) : 0;
-        $data['payment_amout'] = $request->trx_amount - $data['disc_amount'];
+        $data['payment_amout'] = $data['trx_amount'] - $data['disc_amount'];
 
         return $data;
     }
