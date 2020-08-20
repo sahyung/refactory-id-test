@@ -12,7 +12,14 @@ class TierController extends Controller
 {
     public function browse(Request $request)
     {
+        $limit     = $request->has('limit') ? $request->limit : 10;
+        $offset    = $request->has('offset') ? $request->offset : 0;
+        $tiers = DB::table('tiers');
+        $data = [];
+        $data['tier_count'] = $tiers->count();
+        $data['tiers'] = $tiers->oldest()->skip($offset)->take($limit)->get();
 
+        return $data;
     }
 
     public function read($id)
