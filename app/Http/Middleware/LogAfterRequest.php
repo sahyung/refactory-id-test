@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use App\Models\Request;
-use Illuminate\Support\Facades\Log;
 
 class LogAfterRequest
 {
@@ -21,7 +20,7 @@ class LogAfterRequest
         $r->method = $request->method();
         $r->request = json_encode([
             'headers' => $request->header(),
-            'body' => $request->all(),
+            'body' => $request->except(['password']),
         ]);
         $r->response = json_encode([
             $response->status() => $response->getData(),
