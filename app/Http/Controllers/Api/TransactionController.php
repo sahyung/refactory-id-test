@@ -33,10 +33,11 @@ class TransactionController extends Controller
             [
                 'disc' => false,
                 'disc_rate' => $tier ? $tier['disc_rate'] : 0, // discount percentage
+                'disc_prob' => $tier ? $tier['disc_prob'] : 0, // probability to get the discount
             ]
         );
 
-        $data['disc'] = $this->roulette([1, 0], [$tier['disc_prob'], (100 - $tier['disc_prob'])]);
+        $data['disc'] = $this->roulette([1, 0], [$data['disc_prob'], (100 - $data['disc_prob'])]);
         $data['disc_amount'] = $data['disc'] ? floor($data['disc_rate'] * $request->trx_amount / 100) : 0;
         $data['payment_amout'] = $data['trx_amount'] - $data['disc_amount'];
 

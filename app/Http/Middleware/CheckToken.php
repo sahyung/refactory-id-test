@@ -22,9 +22,11 @@ class CheckToken
             if ($startWith === 'token') {
                 $token = explode(' ', $request->header('authorization'));
                 if (sizeof($token) > 1) {
-                    $userId = User::where('remember_token', '=', $token[1])
-                        ->pluck('id')->first();
-                    if ($userId) return $next($request);
+                    $user = User::where('remember_token', '=', $token[1])->first();
+                    if ($user) {
+                        Auth::login($user);
+                        return $next($request);
+                    }
                 }
             }
         }
