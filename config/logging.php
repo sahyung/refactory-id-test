@@ -36,7 +36,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['daily'],
+            'channels' => ['daily', 'custom-single'],
             'ignore_exceptions' => false,
         ],
 
@@ -44,6 +44,16 @@ return [
             'driver' => 'single',
             'path' => storage_path('logs/laravel.log'),
             'level' => 'debug',
+        ],
+
+        'custom-single' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/server.log'),
+            'level' => 'debug',
+            'formatter' => Monolog\Formatter\LineFormatter::class,
+            'formatter_with' => [
+                'dateFormat' => 'Y-m-d\TH:i:sP',
+            ],
         ],
 
         'daily' => [
