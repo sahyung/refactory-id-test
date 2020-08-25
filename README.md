@@ -9,6 +9,16 @@ $ composer install
 $ php artisan serve
 ```
 
+## Test
+```sh
+curl --location --request POST '127.0.0.1:8000/api' \
+--header 'Accept: */*' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "counter": "810"
+}'
+```
+
 ## Simple Client-Server App
 Buatlah aplikasi client-server dengan kriteria sebagai berikut:
 
