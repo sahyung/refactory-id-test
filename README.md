@@ -6,51 +6,37 @@ Test for PHP Developer position at PT. Solusi Pembayaran Elektronik.
 $ git clone
 $ cp .env.example .env
 $ composer install
-$ php artisan migrate --seed
 $ php artisan serve
 ```
 
-## Challenge
-1. Create endpoint which handle `request` below
+## Simple Client-Server App
+Buatlah aplikasi client-server dengan kriteria sebagai berikut:
+
+1. Setiap menit client akan mengirimkan POST request ke server, dengan payload seperti contoh berikut:
 ```json
-{
-    "customer_id": "string",
-    "trx_id": "string",
-    "trx_amount": "float",
-    "trx_date_time": "date_time",
-}
+// Header
+"X-RANDOM": "93f9h3dx"
+// Body
+{ "counter": 1 }
+```
+```json
+// Header
+"X-RANDOM": "fe9g83jm"
+// Body
+{ "counter": 2 }
+```
+```json
+// Header
+"X-RANDOM": "igrijd9p"
+// Body
+{ "counter": 3 }
 ```
 
-return `response` below
-```json
-{
-    "customer_id": "string",
-    "trx_id": "string",
-    "trx_amount": "float",
-    "trx_date_time": "date_time",
-    "disc": "bool",
-    "disc_rate": "integer | percentage of the discount for this transaction",
-    "disc_amount": "float | how much discount for this transaction ",
-    "payment_amout": "float | amount needs to be paid",
-}
+2. Server akan menerima request dari client tersebut. Menyimpan body maupun header ke file `server.log`. Lalu memberikan response HTTP code 201.
+Contoh isi file `server.log`
+```
+[2020-07-28T16:23:40+07:00] Success: POST http://192.168.1.30/ {"counter": 1, "X-RANDOM": "93f9h3dx"}
+[2020-07-28T16:24:40+07:00] Success: POST http://192.168.1.30/ {"counter": 2, "X-RANDOM": "fe9g83jm"}
+[2020-07-28T16:25:40+07:00] Success: POST http://192.168.1.30/ {"counter": 3, "X-RANDOM": "igrijd9p"}
 ```
 
-2. Create endpoint for CRUD tier system for `disc_rate` based on `trx_amount` value, example:
-   - Tier 1: 
-     - start from 0 to 100.000
-     - disc_rate: 10%
-     - disc_prob: 90%
-   - Tier 2: 
-     - start from 100.000 to 200.000
-     - disc_rate: 20%
-     - disc_prob: 45%
-
-the price range cannot overlap with other tier
-
-3. Create logging system, minimum for this items:
-   - request time
-   - request values
-   - response time
-   - response values
-
-4. add security, minimum for CRUD tier system
