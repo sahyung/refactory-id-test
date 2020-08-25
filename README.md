@@ -1,5 +1,5 @@
-# SPE TEST PHP DEVELOPER
-Test for PHP Developer position at PT. Solusi Pembayaran Elektronik.
+# Refactory Coding Interview - Backend
+https://gitlab.refactory.id/snippets/3 | challenge no. 2
 
 ## Quickstart
 ```
